@@ -155,6 +155,45 @@ docker run -d -p 8000:8000 --name boston-fastapi --network boston-network boston
 # Run Streamlit with network
 docker run -d -p 8501:8501 --name boston-streamlit --network boston-network boston-streamlit:latest
 ```
+docker network create boston-network
+
+
+Membuat jaringan Docker baru bernama "boston-network"
+Memungkinkan container yang terhubung ke jaringan ini untuk berkomunikasi satu sama lain
+Container dalam jaringan yang sama dapat saling merujuk menggunakan nama container mereka sebagai hostname
+
+
+docker run -d -p 8000:8000 --name boston-fastapi --network boston-network boston-fastapi:latest
+
+
+-d: Menjalankan container dalam mode detached (background)
+-p 8000:8000: Memetakan port 8000 host ke port 8000 container
+--name boston-fastapi: Memberikan nama "boston-fastapi" ke container
+--network boston-network: Menghubungkan container ke jaringan "boston-network"
+boston-fastapi:latest: Nama image yang akan dijalankan
+
+
+docker run -d -p 8501:8501 --name boston-streamlit --network boston-network boston-streamlit:latest
+
+
+-d: Menjalankan container dalam mode detached (background)
+-p 8501:8501: Memetakan port 8501 host ke port 8501 container
+--name boston-streamlit: Memberikan nama "boston-streamlit" ke container
+--network boston-network: Menghubungkan container ke jaringan "boston-network"
+boston-streamlit:latest: Nama image yang akan dijalankan
+
+Manfaat menggunakan network:
+
+Isolasi: Container dalam jaringan yang sama terisolasi dari container di jaringan lain
+Komunikasi: Container dapat berkomunikasi menggunakan nama container sebagai hostname
+Keamanan: Membatasi akses hanya ke container yang terhubung ke jaringan
+DNS Internal: Docker menyediakan DNS internal untuk resolusi nama antar container
+
+Contoh komunikasi:
+
+Streamlit dapat mengakses FastAPI menggunakan URL http://boston-fastapi:8000
+Tidak perlu menggunakan localhost atau IP address
+Komunikasi lebih aman karena terisolasi dalam jaringan Docker
 
 ### Using Docker Compose
 
